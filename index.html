@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>wonderbolt.net</title>
+  <style>
+    body {
+      background-color: #000;
+      color: #00ff66;
+      font-family: 'Courier New', monospace;
+      padding: 40px;
+      font-size: 1.2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cursor {
+      display: inline-block;
+      width: 10px;
+      background-color: #00ff66;
+      animation: blink 1s infinite;
+      margin-left: 3px;
+    }
+
+    @keyframes blink {
+      0%, 50% { opacity: 1; }
+      51%, 100% { opacity: 0; }
+    }
+
+    /* The ASCII art in the corner */
+    .ascii {
+      position: fixed;
+      bottom: 15px;
+      right: 25px;
+      text-align: right;
+      font-size: 0.7rem;
+      line-height: 0.8rem;
+      color: #999;
+      white-space: pre;
+      opacity: 0.6;
+      user-select: none;
+    }
+
+    .ascii .cloud { color: #ccc; }
+
+    .bolt1 { color: #ffcc00; }
+    .bolt2 { color: #ff6600; }
+    .bolt3 { color: #0099ff; }
+
+    /* Flicker animation for the bolt */
+    @keyframes flicker {
+      0%, 95%, 100% { filter: brightness(1); }
+      96%, 98% { filter: brightness(2.5); }
+      97%, 99% { filter: brightness(4); }
+    }
+
+    .bolt1, .bolt2, .bolt3 {
+      display: inline-block;
+      animation: flicker 8s infinite;
+    }
+
+    /* Offset timings for a natural feel */
+    .bolt1 { animation-delay: 0s; }
+    .bolt2 { animation-delay: 0.2s; }
+    .bolt3 { animation-delay: 0.4s; }
+  </style>
+</head>
+<body>
+  <div id="terminal"></div>
+
+  <div class="ascii">
+    <span class="cloud">    ___  </span><br>
+    <span class="cloud">  _(   )_</span><br>
+    <span class="cloud"> (_______)</span><br>
+    <span class="bolt1">    /</span><span class="bolt2">/</span><span class="bolt3">/</span>
+  </div>
+
+  <script>
+    const lines = [
+      "> wonderbolt.net status",
+      "> Connection established.",
+      "> Weather: 100% chance of awesome."
+    ];
+    const terminal = document.getElementById("terminal");
+    let line = 0;
+    let char = 0;
+
+    function typeLine() {
+      if (line < lines.length) {
+        if (char < lines[line].length) {
+          terminal.innerHTML = terminal.innerHTML.replace(/<span.*<\/span>/, "") + lines[line][char++];
+          terminal.innerHTML += '<span class="cursor"></span>';
+          setTimeout(typeLine, 50 + Math.random() * 50);
+        } else {
+          terminal.innerHTML = terminal.innerHTML.replace(/<span.*<\/span>/, "") + "<br>";
+          line++;
+          char = 0;
+          setTimeout(typeLine, 500);
+        }
+      } else {
+        terminal.innerHTML = terminal.innerHTML.replace(/<span.*<\/span>/, "") + '<span class="cursor"></span>';
+      }
+    }
+
+    typeLine();
+  </script>
+</body>
+</html>
